@@ -25,7 +25,7 @@ declare -r TAG_MP3="3.100"
 
 declare -r GIT_FFMPEG="https://github.com/FFmpeg/FFmpeg"
 declare -r GIT_X264="https://code.videolan.org/videolan/x264.git"
-declare -r HG_X265="https://bitbucket.org/multicoreware/x265"
+declare -r GIT_X265="https://bitbucket.org/multicoreware/x265_git.git"
 declare -r GIT_AAC="https://github.com/mstorsjo/fdk-aac"
 declare -r URL_MP3="https://downloads.sourceforge.net/project/lame/lame/$TAG_MP3/lame-$TAG_MP3.tar.gz"
 declare -r GIT_NASM="https://github.com/netwide-assembler/nasm.git"
@@ -58,7 +58,7 @@ fi
 # libx265
 if [[ ! -d $SRC_X265 ]]
 then
-    hg clone $HG_X265 $SRC_X265
+    git clone $GIT_X265 $SRC_X265
 fi
 
 # libfdk_aac
@@ -144,8 +144,8 @@ popd
 ##############
 
 pushd "$SRC_X265/build/linux"
-latest=$(hg tags | grep -vw tip | grep -v _ | sort | tail -1 | awk '{print $2}')
-hg update $latest
+latest=$(git tag | grep -v _ | sort | tail -1)
+git reset --hard $latest
 cmake \
     -G "Unix Makefiles" \
     -DCMAKE_INSTALL_PREFIX="$BUILD" \
